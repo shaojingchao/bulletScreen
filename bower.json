@@ -1,0 +1,20 @@
+{
+  "name": "bulletScreen",
+  "homepage": "https://github.com/shaojingchao/bulletScreen",
+  "authors": [
+    "shaojingchao <1247537710@qq.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "artTemplate": "art-template#^4.12.1"
+  }
+}
