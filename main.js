@@ -1,5 +1,6 @@
 /**
  * Created by 邵敬超 on 2017/11/27.
+ * @requires tmpl.js 模板引擎
  */
 
 ;(function (win, $) {
@@ -12,15 +13,60 @@
 	 * */
 	var defaults = {
 		color: '#fff',
-		fontSize: 14,
-		time:5,
+		fontSize: '30px',
+		time: '5',
+		delay:300,
 		text: '这是一条弹幕。'
 	};
 	
-	// template.defaults();
-	// var tmpl = template;
+	function getBullet() {
+		return {
+			fontSize: $('[name="f_size"]').val(),
+			text: $('input[name="f_text"]').val(),
+			color: $('[name="f_color"]:checked').val(),
+			time: $('[name="f_time"]').val()
+		}
+	}
 	
+	/*单条弹幕处理*/
+	 function _itemFn (item) {
+		var _item = $.extend({},this._opts.config,item);
+		var $item = $(tmpl(this._opts.itemTpl, [_item]));
+		var _size = this._size;
+		var _time = parseInt(_item.time);
+		var _ran = Math.random() * _size.height * (1 / 3);
+		this.$el.find('.J_bulList').append($item);
+		$item.css({
+			'top': _ran + 'px',
+			'transform': 'translate(-' + (_size.width + $item.outerWidth()) + 'px)',
+			'transition': 'transform ' +( _time + 's') +' linear'
+		});
+		setTimeout(function () {
+			$item.remove();
+		}, _time * 1000);
+	}
 	
+	/*添加弹幕*/
+	 function addBul (data) {
+		var _this = this;
+		var _delay = _this._opts.config.delay;
+		if (data == null) {
+			data = getBullet();
+		}
+		if($.isArray(data)) {
+			$.each(data,function (index,item) {
+				
+				/*多条数据延迟发送*/
+				(function (t) {
+					setTimeout(function () {
+						_itemFn.call(_this,item)
+					},t)
+				})(index * _delay)
+			})
+		}else{
+			_itemFn.call(_this,data)
+		}
+	}
 	
 	/**
 	 * opts 配置
@@ -31,55 +77,29 @@
 	 * */
 	var Bullet = function ($el, data, opts) {
 		this.$el = $el;
-		this.opts = opts;
-		opts.config = opts.config != null ? $.extend({}, defaults,opts.config) : defaults;
-		
-		this.size = function () {
-			return {
-				height: $el.innerHeight(),
-				width: $el.innerWidth()
-			}
+		this._opts = opts;
+		this._default = defaults;
+		this._opts.config = opts.config != null ? $.extend({}, defaults, opts.config) : defaults;
+		this._size = {
+			height: $el.innerHeight(),
+			width: $el.innerWidth()
 		};
-		var _this = this;
-		var _data = [];
-		for (var i = 0; i< data.length;i++) {
-			_data[i] = $.extend({}, opts.config, data[i])
-		}
-		console.log(_data);
-		// $el.html();
-		
-		console.log(this.$el)
-		this.$el.append(tmpl(opts.tpl,[]));
-		$(_data).each(function () {
-			_this.addItem(this,this.time);
-		});
-		return _this
+		this.$el.append(tmpl(opts.tpl, []));
+		addBul.call(this,data);
+		return this
 	};
+	
 	
 	Bullet.fn = Bullet.prototype;
-	Bullet.fn.renderItem = function (item) {
-		var _opts = this.opts;
-		var _item = $.extend({}, item, _opts.config);
-		return tmpl(_opts.itemTpl, [_item])
-	};
 	
-	Bullet.fn.addItem = function (item, time) {
-		console.log(this.opts.config)
-		var $item = $(this.renderItem($.extend(this.opts.config,item)));
-		var _size = this.size();
-		var _ran = Math.random() * _size.height * (1 / 3);
-		console.log(time);
-		this.$el.find('.J_bulList').append($item);
-		$item.css({
-			'top': _ran + 'px',
-			'transform': 'translate(-' + (_size.width + $item.outerWidth()) + 'px)',
-			'transition': 'transform ' + time + 's linear'
-		});
-		var aa = setTimeout(function () {
-			// $item.remove();
-			
-		}, time*1000);
+	Bullet.prototype = {
+		addBul: addBul,
+		getBullet: getBullet
 	};
+
+	if(window.tmpl == null){
+		console.error('请先加载 blueimp-JavaScript-Templates 插件')
+	}
 	
 	win.Bullet = Bullet;
 })(window, jQuery);
