@@ -1,7 +1,7 @@
 # bulletScreen
 
 
-··
+·
 /**
  * Created by 邵敬超 on 2017/11/27.
  * @requires tmpl 模板引擎
@@ -107,4 +107,4 @@
   
   win.Bullet = Bullet;
 })(window, jQuery);
-··
+·
