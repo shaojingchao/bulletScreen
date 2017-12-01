@@ -15,7 +15,7 @@
 		color: '#fff',
 		fontSize: '30px',
 		time: '5',
-		delay:300,
+		delay:400,
 		text: '这是一条弹幕。'
 	};
 	
