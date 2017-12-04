@@ -15,7 +15,7 @@
 		color: '#fff',
 		fontSize: '30px',
 		time: '5',
-		delay:400,
+		delay:300,
 		text: '这是一条弹幕。'
 	};
 	
@@ -32,42 +32,80 @@
 	function _NextPos (len) {
 		this.itemPos = {};
 		this.box = new Array(len);
+		var _this = this;
+		
+		//获取空隙最大的那条弹幕
+		function getMinNum (itemPos) {
+			var arr1 = [];
+			var arr2 = [];
+			var _id;
+			for (_id in itemPos){
+				arr1.push(itemPos[_id].index);
+				arr2.push(itemPos[_id].right);
+			}
+			
+			console.log(itemPos[_id])
+			var _min = Math.min.apply(null,arr2);
+			console.log('_min_min_min_min_min_min_min_min',arr2.indexOf(_min))
+			if (!(arr1[arr2.indexOf(_min)])){
+				console.warn(arr1,arr2)
+			}
+			
+			return arr1[arr2.indexOf(_min)]
+		}
 		
 		/*获取空位索引值*/
 		this.getIndex = function () {
 			var filtered = [];
+			
+			// 计算空位
+			var _this = this;
 			$.each(this.box,function (i,item) {
 				if (item === undefined){
 					filtered.push(i)
 				} else {
 					var _item = $('[data-id=' + item + ']');
-					console.log(_item.get(0).getBoundingClientRect())
-					var offset = _item.offset();
-					var itemOffset = {
-						top:parseInt(offset.top),
-						left:parseInt(offset.left),
-						width:_item.width(),
-						height:_item.height()
-					}
-					console.log('itemOffset',itemOffset)
+					var _rect = _item.get(0).getBoundingClientRect();
+					// _this.itemPos[item] = {};
+					_this.itemPos[item].right = parseInt(_rect.right);
 				}
-			})
-			console.log(filtered)
-			return (filtered.length > 0) ? filtered[0] : false;
-		}
+			});
+			
+			console.log(_this.itemPos)
+			
+			// console.log(_this.itemPos);
+			
+			var filteredLen = filtered.length;
+			var _ranIndex = parseInt(filteredLen * Math.random());
+			var _minMumId = getMinNum(_this.itemPos);
+			console.log('_minMumId',_minMumId);
+			
+			//空位优先
+			if (filteredLen > 0) {
+				return filtered[_ranIndex]
+			}
+			//没有空位获取空间最大的位置
+			else if (_minMumId) {
+				return _minMumId
+			} else {
+				console.log('----------------false')
+				return false;
+			}
+		};
 		
 		// 添加一条弹幕记录
-		this.add = function (id,pos) {
-			pos.index = this.getIndex()
-			if (pos.index !== false) {
-				this.itemPos[id] = pos;
-				this.box[pos.index] = id;
-				console.log('添加成功');
-				return pos;
+		this.add = function (id) {
+			var _index = this.getIndex();
+			console.log('_index_index_index_index_index_index_index_index_index_index',_index)
+			if (_index !== false) {
+				this.itemPos[id] = {};
+				this.itemPos[id].index = _index;
+				this.box[_index] = id;
+				return this.itemPos[id];
 			}else{
 				return false;
 			}
-		}
+		};
 		
 		// 弹幕消失删除记录
 		this.del = function (id) {
@@ -75,25 +113,9 @@
 				delete this.itemPos[id];
 				this.box = this.box.map(function (value) {
 					return value === id ? undefined : value
-				})
-				console.log(id + ': 已移除')
+				});
 			}
-		}
-		
-		// this.getPos = function () {
-		// 	var filtered = [];
-		// 	$.each(this.box,function (i,item) {
-		// 		if (item === undefined){
-		// 			filtered.push(i)
-		// 		}
-		// 	})
-		// 	if(filtered.length){
-		// 		return filtered[0];
-		// 	}else{
-		//
-		// 	}
-		//
-		// }
+		};
 		
 	}
 	
@@ -107,27 +129,40 @@
 		var _ran = parseInt(Math.random() * this.maxLen);
 		 var _size = this._size;
 		 var _time = parseInt(_item.time);
-		this.$el.find('.J_bulList').append($item);
 		var _date = new Date().getTime();
-		var _pos = _this.nextPos.add(_date,{
-			w: $item.width(),
-			h:$item.height()
-		})
-		$item.attr('data-id',_date)
+		var _pos = _this.nextPos.add(_date);
+		var _loopAdd;
 		
-		console.log('_pos',_pos);
 		
-		 
+		function _call (_pos) {
+			console.log(_pos)
+			_this.$el.find('.J_bulList').append($item);
+			$item.attr('data-id',_date);
+			$item.css({
+				'top':  _pos.index * 45 + 'px',
+				'transform': 'translate(-' + (_size.width + $item.outerWidth()) + 'px)',
+				'transition': 'transform ' +( _time + 's') +' linear'
+			});
+			setTimeout(function () {
+				$item.remove();
+				_this.nextPos.del(_date);
+			}, _time * 1000);
+		}
 		
-		$item.css({
-			'top':  (_pos ? _pos.index : _ran) * 45 + 'px',
-			'transform': 'translate(-' + (_size.width + $item.outerWidth()) + 'px)',
-			'transition': 'transform ' +( _time + 's') +' linear'
-		});
-		setTimeout(function () {
-			$item.remove();
-			_this.nextPos.del(_date);
-		}, _time * 1000);
+		console.log(_pos);
+		
+		if (_pos === false) {
+			_loopAdd = setInterval(function () {
+				_pos = _this.nextPos.add(_date);
+				if (_pos) {
+					clearInterval(_loopAdd);
+					_call(_pos);
+				}
+			},1000);
+		} else {
+			_call(_pos)
+		}
+		
 	}
 	
 	/*添加弹幕*/
@@ -170,9 +205,6 @@
 		};
 		this.maxLen = parseInt(this._size.height * 0.7 / 45);
 		this.nextPos = new _NextPos(this.maxLen);
-		console.log('nextPos',this.nextPos);
-		
-		// this.$el.append(tmpl(opts.tpl, []));
 		addBul.call(this,data);
 		return this
 	};
