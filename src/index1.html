@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=0">
+  <title>弹幕demo</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+<div class="bulletBox"
+     style="background:url('http://up.enterdesk.com/edpic/34/3f/f4/343ff4ada1548da0a81388f86dd9d1af.jpg') center center no-repeat;">
+
+</div>
+
+
+<!--bullet 模板-->
+<script type="text/html" id="tpl_bulletItem">
+  {% for (var i = 0;i< o.length; i++) { %}
+  <li>
+    <span style="font-size:{%=o[i]['fontSize'] %};color:{%=o[i]['color'] %}">{%=o[i].text %}</span>
+    <a href="javascript:" class="close">×</a>
+  </li>
+  {% } %}
+</script>
+<script type="text/html" id="tpl_bullet">
+  <div class="J_bulContent">
+    <ul class="J_bulList">
+      {% include('tpl_bulletItem',o); %}
+    </ul>
+    <div class="J_bulCtrl">
+      <label>时间：
+        <select name="f_time">
+          <option value="1">1秒</option>
+          <option value="3">3秒</option>
+          <option value="5" selected>5秒</option>
+          <option value="7">7秒</option>
+          <option value="9">9秒</option>
+          <option value="12">12秒</option>
+        </select>
+      </label>
+      <label>字号：
+        <select name="f_size">
+          <option value="12px">12px</option>
+          <option value="14px">14px</option>
+          <option value="16px" selected>16px</option>
+          <option value="20px">20px</option>
+          <option value="20px">24px</option>
+          <option value="20px">30px</option>
+        </select>
+      </label>
+      <span class="color-list">
+      <label><input type="radio" name="f_color" checked value="red"><b class="b_color"
+                                                                       style="background-color:red;"></b></label>
+      <label><input type="radio" name="f_color" value="green"><b class="b_color"
+                                                                 style="background-color:green;"></b></label>
+      <label><input type="radio" name="f_color" value="orange"><b class="b_color" style="background-color:orange;"></b></label>
+      <label><input type="radio" name="f_color" value="blue"><b class="b_color"
+                                                                style="background-color:blue;"></b></label>
+      <label><input type="radio" name="f_color" value="purple"><b class="b_color" style="background-color:purple;"></b></label>
+    </span>
+      <input type="text" name="f_text" value="" placeholder="请输入文字">
+      <a href="javascript:" class="send">发送</a>
+    </div>
+  </div>
+</script>
+
+<!--bullet 模板-end-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-JavaScript-Templates/3.11.0/js/tmpl.js"></script>
+<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="main.js"></script>
+<script>
+	var data = [{
+		fontSize: '16px',
+		text: '这是一条弹幕。'
+	}, {
+		fontSize: '16px',
+		text: '这是一条弹幕。'
+	}, {
+		fontSize: '16px',
+		text: '这是一条弹幕。'
+	}, {
+		fontSize: '16px',
+		text: '这是一条弹幕。'
+	}, {
+		fontSize: '16px',
+		text: '这是一条弹幕。'
+	}, {
+    fontSize: '16px',
+    text: '这是一条弹幕。'
+  }, {
+    fontSize: '16px',
+    text: '这是一条弹幕。'
+  }, {
+    fontSize: '16px',
+    text: '这是一条弹幕。'
+  }, {
+    fontSize: '16px',
+    text: '这是一条弹幕。'
+  }, {
+    fontSize: '16px',
+    text: '这是一条弹幕。'
+  }, {
+    fontSize: '16px',
+    text: '这是一条弹幕。'
+  }, {
+    fontSize: '16px',
+    text: '这是一条弹幕。'
+  }, {
+    fontSize: '16px',
+    text: '这是一条弹幕。'
+  }, {
+    fontSize: '16px',
+    text: '这是一条弹幕。'
+  }, {
+    fontSize: '16px',
+    text: '这是一条弹幕。'
+  }, {
+    fontSize: '16px',
+    text: '这是一条弹幕。'
+  }, {
+    fontSize: '16px',
+    text: '这是一条弹幕。'
+  }];
+
+  console.log(data.length)
+
+	var bul = new Bullet($(".bulletBox"), data, {
+		tpl: 'tpl_bullet',
+		itemTpl: 'tpl_bulletItem',
+		config: {
+			color:'green',
+      fontSize:'30px',
+      time:'10'
+    }
+	});
+
+	function sendBul () {
+		var _text = $('input[name="f_text"]').val();
+		if (_text != null && _text != '') {
+			bul.addBul()
+		}
+	}
+
+	$('.J_bulCtrl').on('click', '.send', function () {
+		sendBul();
+	});
+
+	$(document).on('keyup',function (e) {
+    if(e.keyCode === 13 && $('.J_bulCtrl').find('[name="f_text"]').is(':focus')){
+	    sendBul();
+    }
+	});
+
+	console.log(bul)
+
+</script>
+</body>
+</html>

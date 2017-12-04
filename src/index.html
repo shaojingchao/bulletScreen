@@ -1,0 +1,175 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="renderer" content="webkit">
+<meta http-equiv="Cache-Control" content="no-siteapp"/>
+<title>教材帮弹幕开启啦</title>
+<link rel="stylesheet" href="css/txjy_base.css">
+<style>
+	html,body{ height: 100%;}
+</style>
+</head>
+
+<body class="bg_body">
+
+<!--内容-->
+<article class="bulletBox">
+	<div class="J_bulContent">
+		<ul class="J_bulList">
+		</ul>
+	</div>
+</article>
+
+
+<!--底部-->
+<figure class="footnav">
+<div class="search">
+    <form action="#" method="get">
+    	<div class="" style="position: absolute; z-index: 99999; left: 5px; bottom: 1px;">
+    		<img src="image/jcb.png" />
+    	</div>
+    	<div class="search_input">
+        	<ul>
+						<li class="wb7"><input type="text" name="keyword" placeholder="输入文字..."></li>
+						<li class="wb3 text_r"><button type="submit" >发弹幕</button></li>
+					</ul>
+        	<div class="clearfix"></div>
+    	</div>
+    </form>
+</div>
+</figure>
+
+<!--bullet 模板-->
+<script type="text/html" id="tpl_bulletItem">
+	{% for (var i = 0;i< o.length; i++) { %}
+	<li>
+		<div class="portrait left"><img src="image/icox04.png"></div>
+		<span style="font-size:{%=o[i]['fontSize'] %};color:{%=o[i]['color'] %}">{%=o[i].text %}</span>
+		<a href="javascript:" class="J_like"><b>{%=o[i].like%}</b></a>
+	</li>
+	{% } %}
+</script>
+<script type="text/html" id="tpl_bullet">
+	<div class="J_bulContent">
+		<ul class="J_bulList">
+			{% include('tpl_bulletItem',o); %}
+		</ul>
+		<!--<div class="J_bulCtrl">-->
+			<!--<label>时间：-->
+				<!--<select name="f_time">-->
+					<!--<option value="1">1秒</option>-->
+					<!--<option value="3">3秒</option>-->
+					<!--<option value="5" selected>5秒</option>-->
+					<!--<option value="7">7秒</option>-->
+					<!--<option value="9">9秒</option>-->
+					<!--<option value="12">12秒</option>-->
+				<!--</select>-->
+			<!--</label>-->
+			<!--<label>字号：-->
+				<!--<select name="f_size">-->
+					<!--<option value="12px">12px</option>-->
+					<!--<option value="14px">14px</option>-->
+					<!--<option value="16px" selected>16px</option>-->
+					<!--<option value="20px">20px</option>-->
+					<!--<option value="20px">24px</option>-->
+					<!--<option value="20px">30px</option>-->
+				<!--</select>-->
+			<!--</label>-->
+			<!--<span class="color-list">-->
+      <!--<label><input type="radio" name="f_color" checked value="red"><b class="b_color"-->
+																																			 <!--style="background-color:red;"></b></label>-->
+      <!--<label><input type="radio" name="f_color" value="green"><b class="b_color"-->
+																																 <!--style="background-color:green;"></b></label>-->
+      <!--<label><input type="radio" name="f_color" value="orange"><b class="b_color" style="background-color:orange;"></b></label>-->
+      <!--<label><input type="radio" name="f_color" value="blue"><b class="b_color"-->
+																																<!--style="background-color:blue;"></b></label>-->
+      <!--<label><input type="radio" name="f_color" value="purple"><b class="b_color" style="background-color:purple;"></b></label>-->
+    <!--</span>-->
+			<!--<input type="text" name="f_text" value="" placeholder="请输入文字">-->
+			<!--<a href="javascript:" class="send">发送</a>-->
+		<!--</div>-->
+	</div>
+</script>
+
+<!--bullet 模板-end-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-JavaScript-Templates/3.11.0/js/tmpl.js"></script>
+<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="js/main.js"></script>
+<script>
+	var data = [{
+		text: '复习这么复习复习这么复习。',
+		like:1
+	}, {
+		text: '复习规划及方法、复材分复材分科汇总！',
+		like:30
+	}, {
+		text: '揣摩每个知识点，弄清每一个原理99！'
+	}, {
+		text: '这是一条弹幕。'
+	}, {
+		text: '这是一条弹幕。'
+	}, {
+		text: '这是一条弹幕。'
+	}, {
+		text: '这是一条弹幕。'
+	}, {
+		text: '这是一条弹幕。'
+	}, {
+		text: '这是一条弹幕。'
+	}, {
+		text: '这是一条弹幕。'
+	}, {
+		text: '这是一条弹幕。'
+	}, {
+		text: '这是一条弹幕。'
+	}, {
+		fontSize: '16px',
+		text: '这是一条弹幕。'
+	}, {
+		fontSize: '16px',
+		text: '这是一条弹幕。'
+	}, {
+		fontSize: '16px',
+		text: '这是一条弹幕。'
+	}, {
+		fontSize: '16px',
+		text: '这是一条弹幕。'
+	}, {
+		fontSize: '16px',
+		text: '这是一条弹幕。'
+	}];
+
+	console.log(data.length)
+
+	var bul = new Bullet($(".bulletBox"), data.slice(0), {
+		itemTpl: 'tpl_bulletItem',
+		config: {
+			color:'#FFF',
+			fontSize:'14px',
+			time:'10'
+		}
+	});
+
+	function sendBul () {
+		var _text = $('input[name="f_text"]').val();
+		if (_text != null && _text != '') {
+			bul.addBul()
+		}
+	}
+
+	$('.J_bulCtrl').on('click', '.send', function () {
+		sendBul();
+	});
+
+	$(document).on('keyup',function (e) {
+		if(e.keyCode === 13 && $('.J_bulCtrl').find('[name="f_text"]').is(':focus')){
+			sendBul();
+		}
+	});
+
+</script>
+</body>
+</html>

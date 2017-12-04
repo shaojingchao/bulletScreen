@@ -1,0 +1,92 @@
+/*!* @description: 天星教育  
+* @author: www.tesoon.com
+* @update-整理: (2017-12-1)
+*/
+@charset "utf-8";
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td,hr,button,article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{margin:0;padding:0;}
+body,button,input,select,textarea{font:14px/1.5 "Microsoft Yahei",SimSun,Arial,sans-serif}
+input,select,textarea{font-size:100%;}
+textarea{resize:vertical;overflow:auto;vertical-align:top}
+input[type="text"]:focus,input[type="password"]:focus,textarea:focus{border-color:#00ab49;outline:none;transition:border-color .1s;}
+a:focus,a:active,a:hover{outline:0}
+abbr[title]{border-bottom:1px dotted}
+b,strong{font-weight:bold}
+button,input,select,textarea{vertical-align:baseline;*vertical-align:middle}
+button,input{line-height:normal}
+button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer;*overflow:visible}
+button[disabled],html input[disabled]{cursor:default}
+input[type="checkbox"],input[type="radio"]{box-sizing:border-box;vertical-align:middle;*height:13px;*width:13px}
+input[type="search"]{-webkit-box-sizing:content-box;-moz-box-sizing:content-box;box-sizing:content-box;-webkit-appearance:textfield}
+input[type="search"]::-webkit-search-decoration,input[type="search"]::-webkit-search-cancel-button{-webkit-appearance:none}
+input:-webkit-autofill,textarea:-webkit-autofill,select:-webkit-autofill{-webkit-box-shadow:0 0 0 1000px white inset;-webkit-text-fill-color:#333; /*这个私有属性是有效的 */}
+input:-webkit-autofill:hover{}
+input:-webkit-autofill:focus{}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block;}
+audio,canvas,video{display:inline-block;*display:inline;*zoom:1;}
+table{border-collapse:collapse;border-spacing:0;}
+th{text-align:inherit;}
+fieldset,img{border:0;}
+iframe{display:block;}
+abbr,acronym{border:0;font-variant:normal;}
+del{text-decoration:line-through;}
+address,caption,cite,code,dfn,em,th,var,i{font-style:normal;font-weight:500;}
+ol,ul,li{list-style:none}
+caption,th{text-align:left;}
+h1,h2,h3,h4,h5,h6{font-weight:500;}
+q:before,q:after{content:'';}
+select{vertical-align:middle;}
+.clear{clear:both;height:0;overflow:hidden;display:block;line-height:0}
+.clearfix:after{clear:both;font-size:0;height:0;display:block;visibility:hidden;content:" ";line-height:0}
+.clearfix{zoom:1}
+.left{float:left;}
+.right{float:right;}
+.hide{display:none}
+.center{text-align:center;}
+.show{display:block!important;visibility:visible;}
+.hidden{display:none!important;visibility:hidden;}
+/*文本对齐*/
+.text_c{ text-align: center;}
+.text_r{ text-align: right;}
+/*文本超出添加省略号*/
+.elli{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;list-style: disc; color:#555 }
+.justify{text-align:justify;text-justify:inter-ideograph}
+a:link{text-decoration:none}
+a.link{color:#4f8ee6;}
+a.link:hover{color:#4f8ee6;opacity:0.9;filter:alpha(opacity=90)}
+a:visited{text-decoration:none}
+a:hover,a:focus{text-decoration:none;}
+a:active{opacity:0.95;filter:alpha(opacity=95)}
+.wb8,.wb7,.wb3,.wb2 { float: left;}
+.wb8{ width: 80%;}
+.wb7{ width: 70%;}
+.wb3{ width: 30%;}
+.wb2{ width: 20%;}
+.m10{ margin-bottom: 10px; }
+.bg_body{background:#241b18 url(../image/tm_bgx2.jpg)bottom center no-repeat; background-size: cover;background-attachment:fixed}
+
+article{margin:0 auto; max-width:640px;width:100%;}
+footer{margin:0 auto 40px auto;max-width:640px;width:100%;padding-bottom:10px;text-align:center;font-size:14px;color:#444;}
+/* 底部 */
+.footnav{position:fixed;bottom:0;margin:0;width:100%;z-index:9999; background: url(../image/tm_but_bg.jpg); background-size: cover; }
+.search{width:100%;max-width:640px;bottom:54px; margin:0 auto; }
+.search_input { margin: 10px 8px; background: #fff; border-radius: 40px; padding: 3px 0;}
+.search_input li{ float: left; }
+.search input{width:90%;padding:6px 10px 4px 45px;border:0; margin-left: 10px; line-height: 100%; font-size: 16px;}
+.search button{padding:6px 20px; margin-right:3px; color:#fff;background:#b82323 url(../image/an_but_bg.jpg); background-size: cover; border:0; border-radius: 30px; }
+
+/* 内容  white-space:nowrap; */
+.a_hong { color: #f73a3a !important;  }
+.a_huang { color: #ffae00 !important;  }
+.a_bai { color: #fff !important;  }
+.barrage{position: fixed;bottom:70px;right:-500px;display: inline-block;width: 500px;z-index: 99999}
+.barrage_box{background-color: rgba(0,0,0,.5);padding-right: 8px; height: 40px;display: inline-block;border-radius: 25px;transition: all .3s;}
+.barrage_box .portrait{ display: inline-block;margin-top: 4px; margin-left: 4px; width: 32px;height: 32px;border-radius: 50%;overflow: hidden; }
+.barrage_box .portrait img{width: 100%;height: 100%;}
+.barrage_box div.p a{ margin-right: 2px; font-size: 14px;color: #fff;line-height: 40px;margin-left: 8px;text-decoration:none;  }
+.barrage_box div.p a:hover{text-decoration:none;}
+.barrage_box .dianzan{visibility: hidden;opacity: 0; text-align: center; width:25px;height: 25px;margin-left: 10px;border-radius: 50%;background:rgba(255,255,255,.1);margin-top:8px; background-image: url(../image/dianzan.png);}
+.barrage_box:hover .dianzan{visibility:visible;opacity: 1;}
+.barrage_box .dianzan a{display:block; text-decoration:none;}
+.barrage_box .dianzan .icon-dianzan{font-size: 14px;color:rgba(255,255,255,.5);display: inline-block;margin-top: 5px; }
+
