@@ -1,6 +1,5 @@
 # bulletScreen
 
-
 ```javascript
 /**
  * Created by 邵敬超 on 2017/11/27.
