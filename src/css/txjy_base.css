@@ -64,7 +64,12 @@ a:active{opacity:0.95;filter:alpha(opacity=95)}
 .wb2{ width: 20%;}
 .m10{ margin-bottom: 10px; }
 .bg_body{background:#241b18 url(../image/tm_bgx2.jpg)bottom center no-repeat; background-size: cover;background-attachment:fixed}
-
+input[type='button']:active,input[type='button']:focus{
+  outline: none;
+}
+:focus{
+  outline: none;
+}
 article{margin:0 auto; max-width:640px;width:100%;}
 
 
@@ -75,7 +80,7 @@ footer{margin:0 auto 40px auto;max-width:640px;width:100%;padding-bottom:10px;te
 .search{width:100%;max-width:640px;bottom:54px; margin:0 auto; }
 .search_input { margin: 10px 8px; background: #fff; border-radius: 40px; padding: 3px 0;}
 .search_input li{ float: left; }
-.search input{width:90%;padding:6px 10px 4px 45px;border:0; margin-left: 10px; line-height: 100%; font-size: 16px;}
+.search input{width:90%;padding:6px 10px 4px 45px;border:0; margin-left: 10px; line-height: 100%; font-size: 14px;}
 .search button{padding:6px 20px; margin-right:3px; color:#fff;background:#b82323 url(../image/an_but_bg.jpg); background-size: cover; border:0; border-radius: 30px; }
 
 /**/
@@ -102,9 +107,10 @@ footer{margin:0 auto 40px auto;max-width:640px;width:100%;padding-bottom:10px;te
   position: absolute;
   left:50%;
   line-height:30px;
+  height:30px;
   padding:5px;
   background-color: rgba(0,0,0,.5);
-  display: inline-block;
+  display: block;
   border-radius: 50px;
   color:#444;
   font-size:18px;
@@ -116,13 +122,14 @@ footer{margin:0 auto 40px auto;max-width:640px;width:100%;padding-bottom:10px;te
   width:30px;
   height:30px;
   border-radius:50%;
+  margin-right:-30px;
 }
 .J_bulList li span{
-  float: left;
-  display: inline-block;
+  display: block;
   text-shadow:0 0 1px rgba(0,0,0,.1);
   color:#fff;
   padding:0 10px;
+  margin:0 50px 0 30px;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 20em;
@@ -131,11 +138,16 @@ footer{margin:0 auto 40px auto;max-width:640px;width:100%;padding-bottom:10px;te
 .J_bulList li .J_like{
   float: right;
   min-width:30px;
+  margin-right:3px;
   height:30px;
   text-align: center;
   line-height:30px;
+  margin-left:-54px;
   color:#fff;
   background:url(../image/dianzan.png) right center no-repeat;
+  transform: scale(1);
+  opacity: 1;
+  transition: all 0.2s;
 }
 .J_like b{
   font-weight:400;
@@ -144,20 +156,25 @@ footer{margin:0 auto 40px auto;max-width:640px;width:100%;padding-bottom:10px;te
   text-align: right;
   margin-right:30px;
 }
-.J_bulCtrl{
-  position: absolute;
-  bottom:0;
-  left:0;
-  right:0;
-  padding:10px;
-  background-color: rgba(0, 0, 0, .7);
-  border-radius:10px;
-  text-align: center;
-  color:#fff;
+.J_bulList li.J_dianzhanEffect .J_like{
+  transform: scale(1.5);
+  opacity: 0;
 }
-.J_bulCtrl .send{
-  color:#fff;
-}
+
+/*.J_bulCtrl{*/
+  /*position: absolute;*/
+  /*bottom:0;*/
+  /*left:0;*/
+  /*right:0;*/
+  /*padding:10px;*/
+  /*background-color: rgba(0, 0, 0, .7);*/
+  /*border-radius:10px;*/
+  /*text-align: center;*/
+  /*color:#fff;*/
+/*}*/
+/*.J_bulCtrl .send{*/
+  /*color:#fff;*/
+/*}*/
 .color-list{
 }
 .color-list label input{

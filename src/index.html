@@ -5,7 +5,6 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="renderer" content="webkit">
-  <meta http-equiv="Cache-Control" content="no-siteapp"/>
   <title>教材帮弹幕开启啦</title>
   <link rel="stylesheet" href="css/txjy_base.css">
   <style>
@@ -34,7 +33,7 @@
     </div>
     <div class="search_input J_bulCtrl">
       <ul>
-        <li class="wb7"><input type="text" name="f_text" value="f_text" placeholder="输入文字..."></li>
+        <li class="wb7"><input type="text" name="f_text" value="" maxlength="20" placeholder="输入文字..."></li>
         <li class="wb3 text_r">
           <button type="button" class="send">发弹幕</button>
         </li>
@@ -47,10 +46,10 @@
 <!--bullet 模板-->
 <script type="text/html" id="tpl_bulletItem">
   {% for (var i = 0;i< o.length; i++) { %}
-  <li data-id="{%=o[i].id%}">
+  <li data-lid="{%=o[i].id%}">
     <div class="portrait left"><img src="image/{%=(o[i].myAva || setAvatar())%}"></div>
-    <span style="font-size:{%=o[i]['fontSize'] %};color:{%=o[i]['color'] %}">{%=o[i].text %}</span>
-    <a href="javascript:" class="J_like"><b>{%=o[i].like%}</b></a>
+    <a class="J_like"><b>{%=o[i].vnum%}</b></a>
+    <span style="font-size:{%=o[i]['fontSize'] %};color:{%=(o[i].vnum > 30 ? 'red' : (o[i].vnum < 30 && o[i].vnum > 1) ? '#ff9316' : o[i]['color']) %}">{%=o[i].text %}</span>
   </li>
   {% } %}
 </script>
@@ -102,7 +101,8 @@
 <script src="js/main-min.js"></script>
 <script>
 	(function (win) {
-		var data = [{
+
+		/*var data = [{
 			text: '复习这么复习复习这么复习。',
 			like: 1
 		}, {
@@ -110,39 +110,10 @@
 			like: 30
 		}, {
 			text: '揣摩每个知识点，弄清每一个原理99！'
-		}, {
-			text: '这是一条弹。'
-		}, {
-			text: '这是一条弹幕   。'
-		}, {
-			text: '这是一条弹幕1231232。'
-		}, {
-			text: '这是一条弹幕2。'
-		}, {
-			text: '这是一条弹幕2312。'
-		}, {
-			text: '这是一条弹幕5421312312。'
-		}, {
-			text: '这是一条弹幕23。'
-		}, {
-			text: '这是一条弹幕2334。'
-		}, {
-			text: '这是一条弹幕365465。'
-		}, {
-			fontSize: '16px',
-			text: '这是一条弹幕1。'
-		}, {
-			fontSize: '16px',
-			text: '这是一条弹幕。'
-		}, {
-			fontSize: '16px',
-			text: '这是一条弹幕。'
-		}, {
-			fontSize: '16px',
-			text: '这是一条弹幕。'
-		}];
+		}];*/
 
 
+		/*用户头像*/
 		win.Avatar = [
 			'icox01.png',
 			'icox02.png',
@@ -170,12 +141,18 @@
 
 		var myAvatar = setAvatar();
 
+		/*获取数据*/
 		var getDefaults = function (cb) {
 			$.get(url + 'action=search', function (data) {
+				console.log(data)
 				cb(data)
 			}, 'json')
 		};
 
+		var url = 'http://192.168.4.106:8080/marketing.php?m=barrage&tid=1&';
+
+
+		/*初始化弹幕*/
 		var bul = bul = new Bullet($(".bulletBox"), [], {
 			itemTpl: 'tpl_bulletItem',
 			config: {
@@ -184,30 +161,33 @@
 				time: '10'
 			}
 		});
-		var url = 'http://192.168.4.106:8080/marketing.php?m=barrage&tid=1&';
+
+		/*首次加载获取一次弹幕*/
 		getDefaults(function (data) {
 			bul.addBul(data)
 		})
 
+    /*轮询最新弹幕*/
 		setInterval(function () {
 			getDefaults(function (data) {
-				// console.log(data)
 				bul.addBul(data)
 			})
 		}, 4000)
 
-
+    /*发送弹幕*/
+		var $input = $('.J_bulCtrl').find('[name="f_text"]');
 		function sendBul () {
-			console.log('yes')
 			var myData = bul.getBullet();
-			myData.myAva = myAvatar;
-			bul.addBul(myData);
-			console.log(bul.getBullet())
-			var _text = $('input[name="f_text"]').val();
-			if (_text != null && _text != '') {
-				$.post(url + '&action=add', bul.getBullet(), function (data) {
+			var _text = $input.val();
+			if (_text != null && _text !== '') {
+				$.post(url + '&action=add', myData, function (data) {
 					console.log(data);
-					bul.addBul()
+					if (data.code === '1') {
+						$input.val('');
+						myData.myAva = myAvatar;
+						myData.id = data.id;
+						bul.addBul(myData);
+					}
 				}, 'json');
 			}
 		}
@@ -217,20 +197,30 @@
 		});
 
 		$(document).on('keyup', function (e) {
-			if (e.keyCode === 13 && $('.J_bulCtrl').find('[name="f_text"]').is(':focus')) {
+			var _isFocus = $input.is(':focus');
+			if (_isFocus) {
+				$input.val($input.val().substr(0,20))
+      }
+			if (e.keyCode === 13 && _isFocus) {
 				sendBul();
 			}
 		});
 
 		/*点赞*/
-		$(document).on('click', '.J_like', function () {
-			console.log('yes')
-			$.get(url + 'action=click&id=' + $(this).data('id'), function (data) {
-				console.log(data)
+		$(document).on('click', '.J_bulList li', function () {
+			var $this = $(this);
+			$.post(url + 'action=click&id=' + $(this).data('lid'), function (data) {
+				if (data.code === '1') {
+					console.log(data);
+					var _$b = $this.find(".J_like").find('b');
+					_$b.text(parseInt((_$b.text() || '0')) + 1)
+					$this.addClass('J_dianzhanEffect').find();
+					setTimeout(function () {
+						$this.removeClass('J_dianzhanEffect');
+					},400)
+        }
 			}, 'json')
 		})
-
-
 	})(window);
 
 </script>

@@ -21,10 +21,10 @@
 	
 	function getBullet () {
 		return {
-			fontSize: $('[name="f_size"]').val(),
+			// fontSize: $('[name="f_size"]').val(),
 			text: $('input[name="f_text"]').val(),
-			color: $('[name="f_color"]:checked').val(),
-			time: $('[name="f_time"]').val()
+			// color: $('[name="f_color"]:checked').val(),
+			// time: $('[name="f_time"]').val()
 		}
 	}
 	
