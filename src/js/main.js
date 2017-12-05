@@ -19,6 +19,7 @@
 		text: '这是一条弹幕。'
 	};
 	
+	/*获取用户弹幕配置*/
 	function getBullet() {
 		return {
 			fontSize: $('[name="f_size"]').val(),
@@ -28,75 +29,90 @@
 		}
 	}
 	
-	/*防重叠*/
+	/**
+	* @description 防重叠 推荐下一次放置位置
+	* @param len {Number} 存放数量
+	* */
 	function _NextPos (len) {
-		this.itemPos = {};
-		this.box = new Array(len);
 		var _this = this;
 		
-		//获取空隙最大的那条弹幕
+		// 弹幕id位置，信息
+		this.itemPos = {};
+		
+		//弹幕索引位置
+		this.box = new Array(len);
+		
+		
+		/**
+		 * @description 获取空隙最大的那条弹幕
+		 * @param itemPos {Object} 弹幕,id,位置，信息
+		 * */
 		function getMinNum (itemPos) {
-			var arr1 = [];
-			var arr2 = [];
+			var _arrIdx = [];
+			var _arrRight = [];
 			var _id;
 			for (_id in itemPos){
-				arr1.push(itemPos[_id].index);
-				arr2.push(itemPos[_id].right);
+				var _index = itemPos[_id].index;
+				if(_arrIdx.indexOf(_index) > -1){
+					_this.box[_index] = _id;
+					_arrIdx[_arrIdx.indexOf(_index)] = _index;
+					_arrRight[_arrIdx.indexOf(_index)] = itemPos[_id].right;
+				} else {
+					_arrIdx.push(itemPos[_id].index);
+					_arrRight.push(itemPos[_id].right);
+				}
 			}
 			
-			console.log(itemPos[_id])
-			var _min = Math.min.apply(null,arr2);
-			console.log('_min_min_min_min_min_min_min_min',arr2.indexOf(_min))
-			if (!(arr1[arr2.indexOf(_min)])){
-				console.warn(arr1,arr2)
+			var _min = Math.min.apply(null,_arrRight);
+			if (_min + 6 > $(win).width()){
+				return false;
 			}
-			
-			return arr1[arr2.indexOf(_min)]
+			return _arrIdx[_arrRight.indexOf(_min)]
 		}
 		
 		/*获取空位索引值*/
 		this.getIndex = function () {
 			var filtered = [];
+			var _box = this.box;
 			
 			// 计算空位
 			var _this = this;
-			$.each(this.box,function (i,item) {
+			$.each(_box,function (i,item) {
 				if (item === undefined){
 					filtered.push(i)
 				} else {
 					var _item = $('[data-id=' + item + ']');
-					var _rect = _item.get(0).getBoundingClientRect();
-					// _this.itemPos[item] = {};
-					_this.itemPos[item].right = parseInt(_rect.right);
+					if(_item.length > 0){
+						var _rect = _item.get(0).getBoundingClientRect();
+						_this.itemPos[item].right = parseInt(_rect.right);
+					}
 				}
 			});
-			
-			console.log(_this.itemPos)
-			
-			// console.log(_this.itemPos);
 			
 			var filteredLen = filtered.length;
 			var _ranIndex = parseInt(filteredLen * Math.random());
 			var _minMumId = getMinNum(_this.itemPos);
-			console.log('_minMumId',_minMumId);
+			
+			// console.log('_minMumId',_minMumId)
 			
 			//空位优先
 			if (filteredLen > 0) {
 				return filtered[_ranIndex]
 			}
 			//没有空位获取空间最大的位置
-			else if (_minMumId) {
+			else if (_minMumId !== false) {
 				return _minMumId
 			} else {
-				console.log('----------------false')
 				return false;
 			}
 		};
 		
-		// 添加一条弹幕记录
+		/**
+		 * @description 添加一条弹幕记录
+		 * @param id {String} 弹幕id
+		 * */
 		this.add = function (id) {
 			var _index = this.getIndex();
-			console.log('_index_index_index_index_index_index_index_index_index_index',_index)
 			if (_index !== false) {
 				this.itemPos[id] = {};
 				this.itemPos[id].index = _index;
@@ -107,7 +123,10 @@
 			}
 		};
 		
-		// 弹幕消失删除记录
+		/**
+		 * @description 弹幕消失删除记录
+		 * @param id {String} 弹幕id
+		 * */
 		this.del = function (id) {
 			if(this.itemPos[id]){
 				delete this.itemPos[id];
@@ -116,7 +135,6 @@
 				});
 			}
 		};
-		
 	}
 	
 	
@@ -126,16 +144,14 @@
 		var _this = this;
 		 var _item = $.extend({},this._opts.config,item);
 		 var $item = $(tmpl(this._opts.itemTpl, [_item]));
-		var _ran = parseInt(Math.random() * this.maxLen);
 		 var _size = this._size;
 		 var _time = parseInt(_item.time);
-		var _date = new Date().getTime();
+		var _date = new Date().getTime() + '';
 		var _pos = _this.nextPos.add(_date);
-		var _loopAdd;
+		var _loopAdd = null;
 		
 		
 		function _call (_pos) {
-			console.log(_pos)
 			_this.$el.find('.J_bulList').append($item);
 			$item.attr('data-id',_date);
 			$item.css({
@@ -149,20 +165,19 @@
 			}, _time * 1000);
 		}
 		
-		console.log(_pos);
-		
+		/*添加不成功*/
 		if (_pos === false) {
+			clearInterval(_loopAdd);
 			_loopAdd = setInterval(function () {
 				_pos = _this.nextPos.add(_date);
 				if (_pos) {
 					clearInterval(_loopAdd);
 					_call(_pos);
 				}
-			},1000);
+			},100);
 		} else {
 			_call(_pos)
 		}
-		
 	}
 	
 	/*添加弹幕*/

@@ -13,13 +13,13 @@
 	 * */
 	var defaults = {
 		color: '#fff',
-		fontSize: '30px',
+		fontSize: '15px',
 		time: '5',
-		delay:400,
+		delay: 300,
 		text: '这是一条弹幕。'
 	};
 	
-	function getBullet() {
+	function getBullet () {
 		return {
 			fontSize: $('[name="f_size"]').val(),
 			text: $('input[name="f_text"]').val(),
@@ -29,8 +29,8 @@
 	}
 	
 	/*单条弹幕处理*/
-	 function _itemFn (item) {
-		var _item = $.extend({},this._opts.config,item);
+	function _itemFn (item) {
+		var _item = $.extend({}, this._opts.config, item);
 		var $item = $(tmpl(this._opts.itemTpl, [_item]));
 		var _size = this._size;
 		var _time = parseInt(_item.time);
@@ -39,7 +39,7 @@
 		$item.css({
 			'top': _ran + 'px',
 			'transform': 'translate(-' + (_size.width + $item.outerWidth()) + 'px)',
-			'transition': 'transform ' +( _time + 's') +' linear'
+			'transition': 'transform ' + (_time + 's') + ' linear'
 		});
 		setTimeout(function () {
 			$item.remove();
@@ -47,24 +47,24 @@
 	}
 	
 	/*添加弹幕*/
-	 function addBul (data) {
+	function addBul (data) {
 		var _this = this;
 		var _delay = _this._opts.config.delay;
 		if (data == null) {
 			data = getBullet();
 		}
-		if($.isArray(data)) {
-			$.each(data,function (index,item) {
+		if ($.isArray(data)) {
+			$.each(data, function (index, item) {
 				
 				/*多条数据延迟发送*/
 				(function (t) {
 					setTimeout(function () {
-						_itemFn.call(_this,item)
-					},t)
+						_itemFn.call(_this, item)
+					}, t)
 				})(index * _delay)
 			})
-		}else{
-			_itemFn.call(_this,data)
+		} else {
+			_itemFn.call(_this, data)
 		}
 	}
 	
@@ -85,19 +85,16 @@
 			width: $el.innerWidth()
 		};
 		this.$el.append(tmpl(opts.tpl, []));
-		addBul.call(this,data);
+		addBul.call(this, data);
 		return this
 	};
-	
-	
-	Bullet.fn = Bullet.prototype;
 	
 	Bullet.prototype = {
 		addBul: addBul,
 		getBullet: getBullet
 	};
-
-	if(window.tmpl == null){
+	
+	if (window.tmpl == null) {
 		console.error('请先加载 blueimp-JavaScript-Templates 插件')
 	}
 	
